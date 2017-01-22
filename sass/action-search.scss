@@ -1,0 +1,26 @@
+
+// -- search
+.evo-search{
+  position:relative;
+  width:200px; 
+  margin: auto;
+  padding: 3px 4px 2px 2px;
+  .evo-field{
+    &:not(:valid) ~ .clear-icon {
+      opacity: 0;
+    }
+  }
+  >.btn{
+    position: relative;
+    top:0;
+  }
+}
+
+.clear-icon {
+  z-index: 3;
+  position: absolute;
+  top: 14px;
+  right: 47px;
+  color: #90a4ae;
+  cursor: pointer;
+}
