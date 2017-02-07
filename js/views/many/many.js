@@ -33,14 +33,14 @@ export default function(){
 			}else if(query){
 				qUrl += '?'+url.querySearch(query)
 			}
-			
+
 			this.setState({
 				loading: true
 			})
 			axios.get(qUrl)
 				.then(response => {
 					this.setState({
-						data: response.data,
+						data: response.data.data,
 						loading: false
 					})
 				})
