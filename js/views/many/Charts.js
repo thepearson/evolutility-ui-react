@@ -19,40 +19,33 @@ import Chart from './Chart'
 
 
 export default React.createClass({
+  viewId: 'charts',
 
-    viewId: 'charts',
+  propTypes: {
+    params: React.PropTypes.shape({
+      entity: React.PropTypes.string.isRequired
+    }),
+  },
 
-    propTypes: {
-        params: React.PropTypes.shape({
-            entity: React.PropTypes.string.isRequired
-        }),
-    },
+  render: function () {
+    const e = this.props.params.entity, m = models[e];
 
-    render: function () {
-        const e = this.props.params.entity,
-            m = models[e]
-    
-        if(m){
-            const title = m.title || m.label,
-                chartFields = dico.getFields(m).filter(dico.fieldInCharts)
-            return (
-
-                <div className="evolutility evol-many-charts">
-                    
-                    <h2 className="evo-page-title">{title}</h2>
-                    
-                    <div className="evolutility evol-many-charts">
-                        {chartFields.length ? chartFields.map(function(f){
-                            return <Chart entity={e} key={f.id} field={f} title={f.label} className="panel-default"/> 
-                        }) : (
-                            <Alert title="No data" message={i18n_charts.nocharts} type="warning"/>
-                        )} 
-                    </div>
-
-                </div>
-            )
-        }else{
-            return <Alert title="Error" message={'Invalid input parameter \"'+e+'\".'}/>
-        }
+    if (m) {
+      const title = m.title || m.label, chartFields = dico.getFields(m).filter(dico.fieldInCharts)
+      return (
+        <div className="evolutility evol-many-charts">
+          <h2 className="evo-page-title">{title}</h2>
+          <div className="evolutility evol-many-charts">
+            {chartFields.length ? chartFields.map(function(f){
+              return <Chart entity={e} key={f.id} field={f} title={f.label} className="panel-default"/>
+            }) : (
+              <Alert title="No data" message={i18n_charts.nocharts} type="warning"/>
+            )}
+          </div>
+        </div>);
     }
+    else {
+      return <Alert title="Error" message={'Invalid input parameter \"'+e+'\".'}/>
+    }
+  }
 })

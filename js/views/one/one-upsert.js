@@ -16,7 +16,6 @@ import {apiPath} from '../../../config.js'
 export default function(){
 
 	return {
-
 		upsertOne: function(entity){
 			const e = entity || this.props.params.entity,
 				id = parseInt(this.props.params.id || '', 10),

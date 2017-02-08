@@ -39,30 +39,30 @@ export default withRouter(React.createClass({
 	},
 
 	clickSave(evt){ 
-		const fields = this.model.fields,
-			v = this.validate(fields, this.state.data)
-
-		if(v.valid){
+		const fields = this.model.fields, v = this.validate(fields, this.state.data);
+		if (v.valid) {
 			this.upsertOne()
-		}else{
+		}
+		else {
 			//alert(v.messages.join('\n'))
 			this.setState({
 				invalid: !v.valid
-			})
+			});
 		}
 	},
 
-	fieldChange(evt) {
-		const fid=evt.target.id,
-			newData=JSON.parse(JSON.stringify(this.state.data||{}))
-		let v = evt.target.value
 
-		if(evt.target.type==='checkbox'){
-			v=evt.target.checked
+
+	fieldChange(evt) {
+		const fid = evt.target.id, newData = JSON.parse(JSON.stringify(this.state.data||{}));
+		let v = evt.target.value;
+
+		if (evt.target.type === 'checkbox') {
+			v = evt.target.checked;
 		}
-		newData[fid]=v
-		this.setDeltaField(fid, v)
-		this.setState({data: newData})
+		newData[fid] = v;
+		this.setDeltaField(fid, v);
+		this.setState({data: newData});
 	},
 /*
 	fieldClick(i, props) {
@@ -72,22 +72,21 @@ export default withRouter(React.createClass({
 		//debugger
 	},
 */
-	setDeltaField(fid, value){
-		if (!this.delta){
-			this.delta={}
+	setDeltaField(fid, value) {
+		if (!this.delta) {
+			this.delta={};
 		}
-		this.delta[fid]=value
-		this._dirty=true
+		this.delta[fid] = value;
+		this._dirty = true;
 	},
 
-	isDirty(){
-		return this._dirty
+	isDirty() {
+		return this._dirty;
 	},
 
 	render() {
 		const urlParts = window.location.pathname.split('/'),
-			isNew = urlParts.length>2 ? urlParts[3]=='0' : false,
-	    	{id=0, entity=null} = this.props.params,
+			isNew = urlParts.length > 2 ? urlParts[3] == '0' : false, {id = 0, entity = null} = this.props.params,
 			ep = '/'+entity+'/',
 			m = this.model,
 			data = this.state.data || {},
@@ -96,49 +95,37 @@ export default withRouter(React.createClass({
 				change: this.fieldChange,
 				//leave: this.fieldLeave,
 				dropFile: this.uploadFileOne
-			},
-        	title = dico.dataTitle(m, data, isNew)
+			}, title = dico.dataTitle(m, data, isNew)
 
-		const fnField = (f)=>{
-			if((f.type==='lov' || f.type==='list') && !f.list){
+		const fnField = (f) => {
+			if ((f.type === 'lov' || f.type === 'list') && !f.list) {
 				// - fetch list values
-				this.getLOV(f.id)
+				this.getLOV(f.id);
 			}
+
 			return (
-				<Field
-					key={f.id} 
-					ref={f.id} 
-					meta={f}
-					value={data[f.id]} 
-					data={data} 
-					callbacks={cbs}
-					entity={entity}
-				/>
+				<Field key={f.id} ref={f.id} meta={f} value={data[f.id]} data={data} callbacks={cbs} entity={entity} />
 			)
-		}
+		};
 		
-  		this.isNew = isNew
-		if(!m){
+		this.isNew = isNew;
+
+		if (!m) {
 			return <Alert title="Error" message={i18n_errors.badEntity.replace('{0}', entity)}/>
-		}else{
- 
+		}
+		else {
 			return (
 				<div className="evolutility">
-            		
-            		<h2 className="evo-page-title">{title}</h2>
-
+          <h2 className="evo-page-title">{title}</h2>
 					<div className="evo-one-edit">
-
-            		{this.state.error ? (
-							<Alert title="Error" message={this.state.error.message}/>
-	            		):(
-							<div className="evol-pnls">
-
-				    			{(m && m.groups) ? (
+						{this.state.error ? (<Alert title="Error" message={this.state.error.message}/>)
+								:
+								(<div className="evol-pnls">
+									{(m && m.groups) ? (
 									m.groups.map(function(g, idx){
 										const groupFields = dico.fieldId2Field(g.fields, m.fieldsH)
 										return (
-											<Panel key={g.id||('g'+idx)} title={g.label || gtitle || ''} width={g.width}>
+											<Panel key={g.id || ('g' + idx)} title = {g.label || gtitle || ''} width = {g.width}>
 												<div className="evol-fset">
 													{groupFields.map(fnField)}
 												</div>
@@ -188,40 +175,40 @@ export default withRouter(React.createClass({
 	},
 
 	validate: function (fields, data) {
-		let messages=[],
-			invalids={},
-			cMsg;
+		let messages = [], invalids = {}, cMsg;
 
 		fields.forEach((f) => {
-			cMsg = validation.validateField(f, data[f.id])
-			if(cMsg){
-				messages.push(cMsg)
-				invalids[f.id]=true
+			cMsg = validation.validateField(f, data[f.id]);
+			if (cMsg) {
+				messages.push(cMsg);
+				invalids[f.id] = true;
 				this.refs[f.id].setState({
 					invalid: true,
 					message: cMsg
-				})
-			}else if(this.refs[f.id].state.invalid===true){
+				});
+			}
+			else if (this.refs[f.id].state.invalid === true) {
 				this.refs[f.id].setState({
 					invalid: false,
 					message: null
-				})
+				});
 			}
-		})
+		});
+
 		return {
-			valid: messages.length<1,
+			valid: messages.length < 1,
 			messages: messages,
 			invalids: invalids
-		}
+		};
 	},
+
 
 	clearValidation(){
 		this.model.fields.forEach((f) => {
 			this.refs[f.id].setState({
 				invalid: false,
 				message: null
-			})
-		})
+			});
+		});
 	}
-
 }))

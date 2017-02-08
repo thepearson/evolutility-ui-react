@@ -36,27 +36,31 @@ var ft = {
 	//widget: 'widget'
 };
 
+
 function isFunction(fn){
   return typeof fn === "function"
 }
+
 
 function fieldIsNumber(f){
 	return [ft.int, ft.dec, ft.money].indexOf(f.type)>-1;
 }
 
+
 function fieldInCharts(f) {
 	return fieldChartable(f) && !f.noCharts;
 }
 
+
 function fieldChartable(f) { 
-	return  (f.type===ft.lov || f.type===ft.list || 
-				f.type===ft.bool || fieldIsNumber(f));
+	return  (f.type === ft.lov || f.type === ft.list || f.type === ft.bool || fieldIsNumber(f));
 }
 
-function hById(arr){
-	var objH={};
-	if(arr){
-		arr.forEach(function(o){
+
+function hById(arr) {
+	var objH = {};
+	if (arr) {
+		arr.forEach(function(o) {
 			objH[o.id] = o; 
 		});
 	}
@@ -73,24 +77,26 @@ function getFields(model) {
 					collateFields(te);
 				}
 			});
-		} else { 
-			if(te.type && te.type!== 'formula'){
+		}
+		else {
+			if (te.type && te.type !== 'formula') {
 				fs.push(te);
 			}
 		}
 	}
 
-	if(model){
-		if(model.fields){
+	if (model) {
+		if (model.fields) {
 			return model.fields;
-		}else{
+		}
+		else {
 			collateFields(model);
-			model.fields=fs;
+			model.fields = fs;
 			return fs;
 		}
 	}
-	return []
-		
+
+	return [];
 }
 
 module.exports = {  
@@ -99,46 +105,53 @@ module.exports = {
 
 	getFields: getFields,
 
-	prepModel: function(m){
-		if(m){
-			if(!m.fields){
+	prepModel: function(m) {
+		if (m) {
+			if (!m.fields) {
 				m.fields = getFields(m);
 			}
-			if(!m.fieldsH){
+
+			if (!m.fieldsH) {
 				m.fieldsH = hById(m.fields);
 			}
-			if(!m.titleField){
+
+			if (!m.titleField) {
 				m.titleField = m.fields[0].id;
 			}
+
 			return m;
 		}
+
 		return null;
 	},
 
-	dataTitle: function(m, data, isNew){
-		if(m){
-			if(isNew){
-				return 'New ' + (m.name || 'item')
-			}else if(m.titleField && isFunction(m.titleField)){
-				return m.titleField(data)
-			}else{
-				return data[m.titleField] || m.label || m.title || ''
+	dataTitle: function(m, data, isNew) {
+		if (m) {
+			if (isNew) {
+				return 'New ' + (m.name || 'item');
 			}
-		}else{
-			return 'New item'
+			else if (m.titleField && isFunction(m.titleField)) {
+				return m.titleField(data);
+			}
+			else {
+				return data[m.titleField] || m.label || m.title || '';
+			}
+		}
+		else {
+			return 'New item';
 		}
 	},
 
-	isFieldMany: function(f){
-		return f.inList || f.inMany
+	isFieldMany: function(f) {
+		return f.inList || f.inMany;
 	},
 
-	fieldIsText: function(f){
+	fieldIsText: function(f) {
 		return [ft.text, ft.textml, ft.url, ft.html, ft.email].indexOf(f.type)>-1;
 	},
 
-	fieldId2Field: function(fieldIds, fieldsH){
-		return fieldIds ? fieldIds.map(function(id){
+	fieldId2Field: function(fieldIds, fieldsH) {
+		return fieldIds ? fieldIds.map(function(id) {
 			return fieldsH[id] || null
 		}) : null
 	},

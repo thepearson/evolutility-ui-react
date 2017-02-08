@@ -16,8 +16,7 @@ import Alert from '../../widgets/Alert'
 import PageNotFound from '../../widgets/PageNotFound'
 import Pagination from '../../widgets/Pagination'
 
-
-  export default React.createClass({
+export default React.createClass({
 
   viewId: 'list',
 
@@ -29,7 +28,7 @@ import Pagination from '../../widgets/Pagination'
   },
 
   mixins: [
-      many()
+    many()
   ],
 
   tableHeader(fields) {
@@ -61,11 +60,11 @@ import Pagination from '../../widgets/Pagination'
       paramsCollec = this.props.paramsCollec;
 
     if (m) {
-      const ico = m.icon ? <img className="evol-many-icon" src={'/pix/'+m.icon}/> : null,
-        link = '/'+((paramsCollec && paramsCollec.entity) || e)+'/browse/'
+      const ico = m.icon ? <img className="evol-many-icon" src={'/pix/' + m.icon}/> : null,
+        link = '/' + ((paramsCollec && paramsCollec.entity) || e) + '/browse/'
 
       function cell (d, f, idx) {
-        const value = d[(f.type==='lov') ? f.id+'_txt' : f.id]
+        const value = d[(f.type==='lov') ? f.id+'_txt' : f.id];
         if (idx===0) {
           return <td key={idx}>
             <Link to={link+d.id}>
@@ -74,7 +73,7 @@ import Pagination from '../../widgets/Pagination'
             </Link>
           </td>
         }
-        else if (f.type==='color') {
+        else if (f.type === 'color') {
           return <td key={idx}>
             <div className="evo-color-box" id={f.id} style={{backgroundColor: value}} title={value}/>
           </td>

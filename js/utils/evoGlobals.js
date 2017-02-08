@@ -7,9 +7,10 @@
 // https://github.com/evoluteur/evolutility-ui-react
 // (c) 2017 Olivier Giulieri
 
-if(!window.evol){
+if (!window.evol) {
 	window.evol = {}
 }
-export default function(){
+
+export default function() {
 	return window.evol
 }

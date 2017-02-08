@@ -1,11 +1,14 @@
 
 module.exports = {
 
-	// - Path to REST API
-	apiPath: 'http://localhost:3000/api/v1/evolutility/',
+	// Define API type (feathers, default)
+	apiType: 'feathers',
 
-	// - Path to uploaded files
-	filesUrl: 'http://localhost:8080/pix/',
+	// - Path to REST API, or feathers api
+	apiPath: 'https://example.com/',
+
+	// - Path to uploaded files, or feathers files api endpoint
+	filesUrl: 'https://example.com/files/',
 
 	// - Pagination
 	pageSize: 50,

@@ -33,14 +33,14 @@ export default function() {
         this.clearValidation();
       }
 
-      if (id && id!=='0') {
+      if (id && id !== '0') {
         this.setState({
           loading: true
         });
 
-        axios.get(apiPath+e+'/'+id)
+        axios.get(apiPath + e + '/' + id)
         .then((response) => {
-          if (response.data!=='') {
+          if (response.data !== '') {
             this.emptyDelta(false);
             newState.data = response.data;
             this.setState(newState);
@@ -60,7 +60,7 @@ export default function() {
           this.setState(newState);
         })
       }
-      else if (id==='0') {
+      else if (id === '0') {
         this.emptyDelta(true);
         newState.data = this.getDefaultData();
         this.setState(newState);
@@ -72,10 +72,10 @@ export default function() {
       this.setModel();
 
       return {
-        data: this.props.params.id=='0' ? this.getDefaultData() : {},
+        data: this.props.params.id == '0' ? this.getDefaultData() : {},
         loading: true,
         invalid: false
-      }
+      };
     },
 
 
@@ -83,19 +83,19 @@ export default function() {
 
       // - set hook to confirm navigation (on leave if dirty data)
       if (this.props.router) {
-        this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave)
+        this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
       }
 
       // - get data or if new then clear data
       if (this.props.params.id && this.props.params.id!='0') {
-        this.getData()
+        this.getData();
       }
       else{
-        this.emptyDelta(true)
+        this.emptyDelta(true);
         this.setState({
           data: this.props.params.id == '0' ? this.getDefaultData() : {},
           invalid: false
-        })
+        });
       }
     },
 
@@ -106,34 +106,34 @@ export default function() {
 
         // TODO: alternative to isMounted
         if (this.isMounted()) {
-          const isNew=nextProps.params.id == '0';
+          const isNew = nextProps.params.id == '0';
           this.emptyDelta(isNew);
           this.setState({
             data: isNew ? this.getDefaultData() : {},
             invalid: false
           });
 
-          if (!isNew && nextProps.params.id!==this.props.params.id) {
-            this.getData(nextProps.params.entity, nextProps.params.id)
+          if (!isNew && nextProps.params.id !== this.props.params.id) {
+            this.getData(nextProps.params.entity, nextProps.params.id);
           }
         }
       }
     },
 
 
-    navigateBack(){
-      browserHistory.goBack()
+    navigateBack() {
+      browserHistory.goBack();
     },
 
 
-    setModel(entity){
-      this.model = models[entity || this.props.params.entity]
+    setModel(entity) {
+      this.model = models[entity || this.props.params.entity];
     },
 
 
-    emptyDelta(useDefault){
+    emptyDelta(useDefault) {
       this._dirty = false
-      this.delta = useDefault ? this.getDefaultData() : {}
+      this.delta = useDefault ? this.getDefaultData() : {};
     }
 
   }

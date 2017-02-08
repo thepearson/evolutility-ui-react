@@ -27,7 +27,7 @@ export default React.createClass({
         fields = this.props.fields || [],
         entity = this.props.entity,
         m = models[entity],
-        link = '/'+entity+'/browse/'
+        link = '/'+entity+'/browse/';
 
   	return (
         <div className="panel panel-default"> 
