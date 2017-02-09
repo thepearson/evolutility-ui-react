@@ -10,7 +10,10 @@ module.exports = {
 	// - Path to uploaded files, or feathers files api endpoint
 	filesUrl: 'https://example.com/files/',
 
-	// - Pagination
+  // Define files call type, feathers-rest (https://docs.feathersjs.com/guides/file-uploading.html), direct (default)
+  filesType: 'feathers-rest',
+
+  // - Pagination
 	pageSize: 50,
 
 	// - Language (en/fr)

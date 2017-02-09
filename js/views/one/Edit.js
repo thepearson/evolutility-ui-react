@@ -34,11 +34,11 @@ export default withRouter(React.createClass({
 
 	mixins: [oneRead(), oneUpsert()],
  
-	getDataDelta: function(){
+	getDataDelta: function() {
 		return this.delta || null
 	},
 
-	clickSave(evt){ 
+	clickSave(evt) {
 		const fields = this.model.fields, v = this.validate(fields, this.state.data);
 		if (v.valid) {
 			this.upsertOne()
@@ -60,6 +60,7 @@ export default withRouter(React.createClass({
 		if (evt.target.type === 'checkbox') {
 			v = evt.target.checked;
 		}
+
 		newData[fid] = v;
 		this.setDeltaField(fid, v);
 		this.setState({data: newData});
@@ -74,8 +75,9 @@ export default withRouter(React.createClass({
 */
 	setDeltaField(fid, value) {
 		if (!this.delta) {
-			this.delta={};
+			this.delta = {};
 		}
+
 		this.delta[fid] = value;
 		this._dirty = true;
 	},
@@ -87,7 +89,7 @@ export default withRouter(React.createClass({
 	render() {
 		const urlParts = window.location.pathname.split('/'),
 			isNew = urlParts.length > 2 ? urlParts[3] == '0' : false, {id = 0, entity = null} = this.props.params,
-			ep = '/'+entity+'/',
+			ep = '/' + entity + '/',
 			m = this.model,
 			data = this.state.data || {},
 			cbs = {
@@ -111,64 +113,62 @@ export default withRouter(React.createClass({
 		this.isNew = isNew;
 
 		if (!m) {
-			return <Alert title="Error" message={i18n_errors.badEntity.replace('{0}', entity)}/>
+			return <Alert title="Error" message={i18n_errors.badEntity.replace('{0}', entity)} />
 		}
 		else {
 			return (
 				<div className="evolutility">
           <h2 className="evo-page-title">{title}</h2>
 					<div className="evo-one-edit">
-						{this.state.error ? (<Alert title="Error" message={this.state.error.message}/>)
-								:
-								(<div className="evol-pnls">
-									{(m && m.groups) ? (
-									m.groups.map(function(g, idx){
-										const groupFields = dico.fieldId2Field(g.fields, m.fieldsH)
-										return (
-											<Panel key={g.id || ('g' + idx)} title = {g.label || gtitle || ''} width = {g.width}>
-												<div className="evol-fset">
-													{groupFields.map(fnField)}
-												</div>
-											</Panel>
-										)
-									})
-								) : (
-									<Panel title={title} key="pAllFields">
-										<div className="evol-fset"> 
-											{m.fields.map(fnField)}
-										</div>
-									</Panel>
-								)}
-
-								{m.collecs ? (
-									m.collecs.map((c, idx)=>{
-										return (
-											<Panel title={c.title} key={'collec_'+c.id}>
-												<List key={'collec'+idx}
-													params={this.props.params} 
-													paramsCollec={c}
-													style={{width:'100%'}}
-													location={this.props.location}
-												/>
-											</Panel>
-										)
-									})
-								) : null}
-
-								<Panel key="formButtons">
-									<div className="evol-buttons">
-										<button className="btn btn-info" onClick={this.clickSave}><i className="glyphicon glyphicon-ok"></i> {i18n_actions.save}</button>
-										<button className="btn btn-default" onClick={this.navigateBack}><i className="glyphicon glyphicon-remove"></i> {i18n_actions.cancel}</button>
-										<span className="">{this.state.invalid ? i18n_validation.incomplete : null}</span>
-										{this.state.error ? i18n_validation.incomplete : null}
+						{this.state.error ? (<Alert title="Error" message={this.state.error.message} />)
+							:
+							(<div className="evol-pnls">
+								{(m && m.groups) ? (
+								m.groups.map(function(g, idx) {
+									const groupFields = dico.fieldId2Field(g.fields, m.fieldsH);
+									return (
+										<Panel key={g.id || ('g' + idx)} title = {g.label || gtitle || ''} width = {g.width}>
+											<div className="evol-fset">
+												{groupFields.map(fnField)}
+											</div>
+										</Panel>
+									)
+								})
+							) : (
+								<Panel title={title} key="pAllFields">
+									<div className="evol-fset">
+										{m.fields.map(fnField)}
 									</div>
 								</Panel>
+							)}
+
+							{m.collecs ? (
+								m.collecs.map((c, idx) => {
+									return (
+										<Panel title={c.title} key={'collec_' + c.id}>
+											<List key={'collec' + idx}
+												params={this.props.params}
+												paramsCollec={c}
+												style={{width: '100%'}}
+												location={this.props.location}
+											/>
+										</Panel>
+									)
+								})
+							) : null}
+
+							<Panel key="formButtons">
+								<div className="evol-buttons">
+									<button className="btn btn-info" onClick={this.clickSave}><i className="glyphicon glyphicon-ok"></i> {i18n_actions.save}</button>
+									<button className="btn btn-default" onClick={this.navigateBack}><i className="glyphicon glyphicon-remove"></i> {i18n_actions.cancel}</button>
+									<span className="">{this.state.invalid ? i18n_validation.incomplete : null}</span>
+									{this.state.error ? i18n_validation.incomplete : null}
+								</div>
+							</Panel>
 
 							</div>
-	 					)
-            		}
+	 					)}
 					</div>
-
 				</div>
 			)
 		}
@@ -203,7 +203,7 @@ export default withRouter(React.createClass({
 	},
 
 
-	clearValidation(){
+	clearValidation() {
 		this.model.fields.forEach((f) => {
 			this.refs[f.id].setState({
 				invalid: false,

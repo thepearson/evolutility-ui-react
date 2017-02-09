@@ -10,26 +10,28 @@ import React from 'react'
 
 import format from '../utils/format'
 import {i18n_actions, i18n_msg} from '../i18n/i18n'
-import {filesUrl} from '../../config.js'
+import {filesUrl, filesType} from '../../config.js'
 
 // - components:
 // - date
 import Datepicker from 'react-datepicker'
+import Image from './Image';
+
 import moment from 'moment'
 // - image & documents
 import Dropzone from 'react-dropzone'
 
 function emHeight(f){
 	let fh = parseInt(f.height || 2, 10);
-	if(fh<2){
-		fh=2;
+	if (fh < 2) {
+		fh = 2;
 	}
-	return Math.trunc(fh*1.6);
+	return Math.trunc(fh * 1.6);
 }
 
 function createMarkup(d) {
 	// TODO: good enough?
-	return {__html: d?d.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>'):''}
+	return {__html: d ? d.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>') : ''};
 }
 
 function createOption(opt){
@@ -53,9 +55,9 @@ export default React.createClass({
 		}
 	},
 
-	_fieldElem(f, d, cbs){
+	_fieldElem(f, d, cbs) {
 		// - return the widget needed for the specific field type
-		if(f.type==='boolean'){
+		if (f.type === 'boolean') {
 			return <input 
 						id={f.id} 
 						key={f.id} 
@@ -64,7 +66,8 @@ export default React.createClass({
 						checked={d?true:false}
 						onChange={cbs.change}
 				    />
-		}else if(f.type==='textmultiline' && f.height>1){
+		}
+		else if (f.type === 'textmultiline' && f.height>1) {
 			return <textarea 
 						id={f.id} 
 						key={f.id} 
@@ -72,16 +75,16 @@ export default React.createClass({
 						rows={f.height} 
 						className="form-control" 
 						value={d?d:''} 
-						onChange={cbs.change}
-					/>
-		}else if(f.type==='lov'||f.type==='list'){
+						onChange={cbs.change} />
+		}
+		else if (f.type === 'lov' || f.type === 'list') {
 			let opts
-
-			if(f.list){
+			if (f.list) {
 				opts = f.list.map(createOption)
-			}else{
+			}
+			else {
 				const optVal = {
-					id:f.id+'loading', 
+					id: f.id + 'loading',
 					text: i18n_msg.loading
 				}
 				opts = [createOption(optVal)]
@@ -93,13 +96,13 @@ export default React.createClass({
 						ref='e' 
 						className="form-control" 
 						value={d || ''}
-						onChange={cbs.change}
-					>
+						onChange={cbs.change}>
 						<option/>
 						{opts}
 					</select>
 
-		}else if(f.type==='date'){
+		}
+		else if (f.type === 'date' || f.type === 'datetime') {
 			return <Datepicker
 						id={f.id} 
 						key={f.id}
@@ -108,14 +111,10 @@ export default React.createClass({
 						selected={d ? moment(d, "YYYY-MM-DD") : null}
 						onChange={this.getDateFieldChange(f.id)}
 					/>
-		}else if(f.type==='image'){
-			let pix = d ? <img 
-						id={f.id} 
-					 	key={f.id}
-						ref='e'
-						className="img-thumbnail"
-						src={filesUrl+d}
-					/> : null
+		}
+		else if (f.type === 'image') {
+			//let pix = d ? <img id={f.id} key={f.id} ref='e' className="img-thumbnail" src={filesUrl + d} /> : null;
+			let pix = d ? <Image type={filesType} url={filesUrl + d} className="img-thumbnail" /> : null;
 
 			return (
 				<div>
@@ -134,10 +133,12 @@ export default React.createClass({
 				</div>
 			)
 		}
-		let inputType
-		if(f.type==='integer' || f.type==='decimal'){
+
+		let inputType;
+		if (f.type === 'integer' || f.type === 'decimal') {
 			inputType = 'number'
-		}else{  //if(f.type==='email'){
+		}
+		else {  //if(f.type==='email'){
 			inputType = 'text'
 		}
 		
@@ -154,15 +155,18 @@ export default React.createClass({
 
 	_fieldElemReadOnly(f, d){
 		// - return the formated field value
-		let fw
-		if(f.type==='textmultiline'){
-			const height = emHeight(f)+'em'
+		let fw;
+
+		if (f.type === 'textmultiline') {
+			const height = emHeight(f) + 'em'
 			return <div key={f.id} className="disabled evo-rdonly" style={{height:height}}
 					dangerouslySetInnerHTML={createMarkup(d)}
 				/> 
-		}else if(f.type==='image' && d){
-			fw = format.image(filesUrl+d)
-		}else {
+		}
+		else if (f.type === 'image' && d) {
+			fw = format.image(filesUrl + d)
+		}
+		else {
 			fw = format.fieldValue(f, d)
 		}
 		return (
@@ -172,11 +176,15 @@ export default React.createClass({
 		)
 	},
 
+
+
 	clickHelp(){
 		this.setState({
 			help: !this.state.help
 		})
 	},
+
+
 
  	render() {
 		const f = this.props.meta || {type: 'text'},
@@ -184,11 +192,10 @@ export default React.createClass({
 			cbs = this.props.callbacks || {},
 			value = this.props.value || null,
 			invalid = this.state.invalid,
-			label = this.props.label || f.label
+			label = this.props.label || f.label;
 
 		return (
 			<div className={'evol-fld'+(invalid?' has-error':'')} style={{width: (f.width || 100)+'%'}}>
-
 				<div className="evol-field-label">
 					<label className="control-label">
 						{label}
@@ -196,21 +203,19 @@ export default React.createClass({
 						{f.help ? <i className="glyphicon glyphicon-question-sign" onClick={this.clickHelp} /> : null}
 					</label>
 				</div>
-
 				{f.help && this.state.help ? <div className="help-block"><i>{f.help}</i></div> : null}
-
-				{readOnly ? this._fieldElemReadOnly(f, value)
-								 : this._fieldElem(f, value, cbs)}
-
+				{readOnly ? this._fieldElemReadOnly(f, value) : this._fieldElem(f, value, cbs)}
  				{invalid ? <div className="text-danger">{this.state.message}</div> : null}
 
 			</div>
 		)
 	},
 
+
+
 	getDateFieldChange(fid) {
 		// - for fields of type date
-		return (v)=>{
+		return (v) => {
 			this.props.callbacks.change({
 				target:{
 					id: fid, 
@@ -220,23 +225,28 @@ export default React.createClass({
 		}
 	},
 
+
+
 	onDropFile(files){
 		// - only for fields of type image or document
-		const f = this.props.meta
-		if(files.length && (f.type==='image' || f.type==='document')){
-			const formData = new FormData()
-			files.forEach((f, idx)=>{
+		const f = this.props.meta;
+		if (files.length && (f.type === 'image' || f.type === 'document')) {
+			const formData = new FormData();
+			files.forEach((f, idx) => {
 				formData.append('filename', files[idx])
-			})			
-			this.props.callbacks.dropFile(f.id, formData)
+			});
+
+			this.props.callbacks.dropFile(f.id, formData);
 		}
 	},
 
+
+
 	removeFile(){
 		// - only for fields of type image or document
-		const f = this.props.meta
-		if(this.props.callbacks.dropFile){
-			this.props.callbacks.dropFile(f.id, null)
+		const f = this.props.meta;
+		if (this.props.callbacks.dropFile) {
+			this.props.callbacks.dropFile(f.id, null);
 		}
 	}
 

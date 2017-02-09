@@ -7,7 +7,9 @@
 // (c) 2017 Olivier Giulieri
 
 import React from 'react'
-import {filesUrl} from '../../config.js'
+import {filesUrl, filesType} from '../../config.js'
+
+import Image from '../widgets/Image';
 
 function notUndefined(v) {
   return (typeof(v) != "undefined")
@@ -21,6 +23,9 @@ module.exports = {
     else if (f.type === 'date') {
       return this.dateString(d);
     }
+    else if (f.type === 'datetime') {
+      return this.dateTimeString(d);
+    }
     else if (f.type === 'color') {
       return (
         <div>
@@ -31,7 +36,7 @@ module.exports = {
       )
     }
     else if (f.type === 'image' && d) {
-      return this.image(filesUrl+d);
+      return this.image(filesUrl + d);
     }
     else if (f.type === 'url' && d) {
       return <a href={d} target="_blank">{d}</a>;
@@ -43,11 +48,11 @@ module.exports = {
   },
 
 
-  image(d){
+  image(d) {
     if (d === null) {
       return null
     }
-    return <img src={d} className="img-thumbnail" />;
+    return <Image type={filesType} url={d} className="img-thumbnail" />;
   },
 
 
@@ -59,7 +64,7 @@ module.exports = {
     if (notUndefined(d) && d !== null) {
       var dateParts = d.split('-');
       if (dateParts.length > 1) {
-        return dateParts[1] + '/'+dateParts[2] + '/' + dateParts[0];
+        return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
       }
     }
     return '';
@@ -78,10 +83,11 @@ module.exports = {
     }
     return '';
   },
-  datetimeString: function(d){
+
+  dateTimeString: function(d) {
     if (notUndefined(d) && d !== null && d !== '') {
       var dateParts = d.split('T');
-      if (dateParts.length>1) {
+      if (dateParts.length > 1) {
         return this.dateString(dateParts[0]) + ', ' + this.timeString(dateParts[1]);
       }
       else {

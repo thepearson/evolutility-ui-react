@@ -41,17 +41,12 @@ export default React.createClass({
       // - header main table
       (f) => <th id={f.id} key={f.id} onClick={this.clickSort}>
           {f.label}
-          {f.id===this._sortField ? (
+          {f.id === this._sortField ? (
               <i className={"glyphicon glyphicon-arrow-"+(this._sortDirection==='desc' ? 'down' : 'up')}></i>
             ) : null
           }
         </th>
-
-    return (
-      <tr>
-        {fields.map(fnCell)}
-      </tr>
-    )
+    return (<tr>{fields.map(fnCell)}</tr>);
   },
 
   render() {
@@ -60,12 +55,12 @@ export default React.createClass({
       paramsCollec = this.props.paramsCollec;
 
     if (m) {
-      const ico = m.icon ? <img className="evol-many-icon" src={'/pix/' + m.icon}/> : null,
-        link = '/' + ((paramsCollec && paramsCollec.entity) || e) + '/browse/'
+      const ico = m.icon ? <img className="evol-many-icon" src={'/pix/' + m.icon} /> : null,
+        link = '/' + ((paramsCollec && paramsCollec.entity) || e) + '/browse/';
 
       function cell (d, f, idx) {
-        const value = d[(f.type==='lov') ? f.id+'_txt' : f.id];
-        if (idx===0) {
+        const value = d[(f.type === 'lov') ? f.id+'_txt' : f.id];
+        if (idx === 0) {
           return <td key={idx}>
             <Link to={link+d.id}>
               {ico}
@@ -75,7 +70,7 @@ export default React.createClass({
         }
         else if (f.type === 'color') {
           return <td key={idx}>
-            <div className="evo-color-box" id={f.id} style={{backgroundColor: value}} title={value}/>
+            <div className="evo-color-box" id={f.id} style={{backgroundColor: value}} title={value} />
           </td>
         }
         return <td key={idx}>{format.fieldValue(f, value, true)}</td>
