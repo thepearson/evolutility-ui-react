@@ -39,7 +39,7 @@ export default React.createClass({
 
     function fnFieldReadOnly(f){
       if(f){
-        const attr = (f.type==='lov') ? f.id+'_txt' : f.id
+        const attr = f.id
         return (
           <Field 
             key={f.id} 

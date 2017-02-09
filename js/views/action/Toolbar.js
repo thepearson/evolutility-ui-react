@@ -47,147 +47,152 @@ function isFunction(fn) {
 
 export default React.createClass({
 
-    propTypes: {
-        params: React.PropTypes.shape({
-            entity: React.PropTypes.string.isRequired,
-            id: React.PropTypes.string
-        }),
-    },
+  propTypes: {
+    params: React.PropTypes.shape({
+      entity: React.PropTypes.string.isRequired,
+      id: React.PropTypes.string
+    }),
+  },
 
-    getInitialState() {
-        return {
-            deleteConfirmation: false
-        }
-    },
-
-    confirmDelete(){
-        this.setState({
-            deleteConfirmation: true
-        })
-    },
-
-    closeModal(){
-        this.setState({
-            deleteConfirmation: false
-        })
-    },
-
-    deleteOne(){
-        // TODO: SHOULD BE IN STORE BUT THERE IS NO STORE YET
-        const {entity, id} = this.props.params
-        if(entity && id && models[entity]){
-            axios.delete(apiPath+entity+'/'+id)
-                .then(response => {
-                    //alert('Item deleted.')
-                    console.log('Item deleted.')
-                    evoGlobals.skip_confirm = true
-                    browserHistory.push('/'+entity+'/list')
-                })
-                .catch(() => {
-                    this.setState({
-                        error: {
-                            message: 'Couldn\'t delete record.'
-                        }
-                    })
-                });
-        }
-        this.closeModal()
-    },
-
-    exportMany(){
-        // - export all records as a CSV file.
-        const e = this.props.entity || ''
-        window.open(apiPath+e+'?format=csv', '_blank');
-    },
-
-    render() {
-        const {entity, id} = this.props.params,
-            ep='/'+entity+'/',
-            cStyle={ 
-                color: '#FFCC80',
-            },
-            urlSearch = window.location.search ? window.location.search.substring(1) : ''
-        let idx = 0,
-            view = this.props.view
-
-        function iicon(icon){
-            return <i className={'glyphicon glyphicon-'+icon}></i>
-        }
-        function buttonLink(menu, idOrFun, iconOnly, style){
-            const text = iconOnly ? null : menu.label
-            if(isFunction(idOrFun)){
-                return <li key={idx++}><a href="javascript:void(0)" onClick={idOrFun} style={style}>{iicon(menu.icon)} {text}</a></li>
-            }else{
-                return <li key={idx++}><Link to={ep+menu.id+'/'+idOrFun} activeStyle={cStyle} style={style}>{iicon(menu.icon)} {text}</Link></li>
-            }
-        }
-        const views = menuItems.views
-        const viewsList = ['list', 'cards', 'charts'].map(function(menu){
-                            return buttonLink(views[menu], '', true)
-                        })
-        let actions = []
-
-        if(id){
-            const isNew = this.props.isNew || id==0
-            if(!isNew){
-                if(view==='edit'){
-                    actions.push(buttonLink(menuItems.views.browse, id));
-                }else if(view==='browse'){
-                    actions.push(buttonLink(menuItems.views.edit, id, null, {minWidth: '88px'}));
-                }
-                actions.push(buttonLink(menuItems.del, this.confirmDelete));
-            }
-        }else if(view!='charts'){
-            //actions.push(buttonLink(menuItems.views.charts, ''));
-            actions.push(buttonLink(menuItems.export, this.exportMany));
-        }
-
-        if(entity && models[entity]){
-            const delModal = this.state.deleteConfirmation ? (
-                <Modal className="modal-dialog"
-                    isOpen={this.state.deleteConfirmation}
-                    onRequestClose={this.closeModal}
-                    style={{content:{position:'absolute',top:'calc(50% - 200px)',left:'calc(50% - 150px)',height:'200px',width:'300px'}}}>
-                        <div>
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <button  onClick={this.closeModal} className="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h4 className="modal-title">Delete item</h4>
-                                </div>
-                                <div className="modal-body">
-                                    Do you really want to delete the {models[entity].name}?
-                                </div>
-                                <div className="modal-footer">
-                                    <button key="bDelCancel" onClick={this.closeModal} className="btn btn-default" data-dismiss="modal">{i18n_actions.cancel}</button>
-                                    <button key="bDelOK" onClick={this.deleteOne} className="btn btn-info" data-dismiss="modal">{i18n_actions.ok}</button>
-                                </div>
-                            </div>
-                        </div>
-                </Modal>
-                ):null
-
-            return (
-              <div className="evo-toolbar">
-                <ul role="nav" className="evo-nav-pills pull-left">
-                    {viewsList}
-                </ul>
-                <ul role="nav" className="evo-nav-pills pull-left">
-                    {buttonLink(menuItems.new, '')}
-                </ul>
-                <ul role="nav" className="evo-nav-pills pull-left"
-                    style={{minWidth:'220px'}}>
-                        {actions}
-                        <li/>
-                </ul>
-
-                <div className="clearfix"/>
-
-                {delModal}
-            
-              </div>
-            )
-        }
-        return null
+  getInitialState() {
+    return {
+      deleteConfirmation: false
     }
+  },
+
+  confirmDelete(){
+    this.setState({
+      deleteConfirmation: true
+    })
+  },
+
+  closeModal(){
+    this.setState({
+      deleteConfirmation: false
+    })
+  },
+
+  deleteOne(){
+    // TODO: SHOULD BE IN STORE BUT THERE IS NO STORE YET
+    const {entity, id} = this.props.params
+    if(entity && id && models[entity]){
+      axios.delete(apiPath+entity+'/'+id)
+        .then(response => {
+          //alert('Item deleted.')
+          console.log('Item deleted.')
+          evoGlobals.skip_confirm = true
+          browserHistory.push('/'+entity+'/list')
+        })
+        .catch(() => {
+          this.setState({
+            error: {
+              message: 'Couldn\'t delete record.'
+            }
+          })
+        });
+    }
+    this.closeModal()
+  },
+
+  exportMany(){
+    // - export all records as a CSV file.
+    const e = this.props.entity || ''
+    window.open(apiPath+e+'?format=csv', '_blank');
+  },
+
+  render() {
+    const {entity, id} = this.props.params,  ep='/' + entity + '/',
+        cStyle={
+          color: '#FFCC80',
+        },
+        urlSearch = window.location.search ? window.location.search.substring(1) : '';
+
+    let idx = 0, view = this.props.view
+
+    function iicon(icon){
+      return <i className={'glyphicon glyphicon-'+icon}></i>
+    }
+
+    function buttonLink(menu, idOrFun, iconOnly, style){
+      const text = iconOnly ? null : menu.label
+      if (isFunction(idOrFun)) {
+        return <li key={idx++}><a href="javascript:void(0)" onClick={idOrFun} style={style}>{iicon(menu.icon)} {text}</a></li>
+      }
+      else {
+        return <li key={idx++}><Link to={ep+menu.id+'/'+idOrFun} activeStyle={cStyle} style={style}>{iicon(menu.icon)} {text}</Link></li>
+      }
+    }
+
+    const views = menuItems.views;
+    const viewsList = ['list', 'cards', 'charts'].map(function(menu){
+                        return buttonLink(views[menu], '', true)
+                    });
+
+    let actions = [];
+
+    if (id) {
+      const isNew = this.props.isNew || id == 0;
+      if (!isNew) {
+        if (view === 'edit') {
+          actions.push(buttonLink(menuItems.views.browse, id));
+        }
+        else if (view === 'browse') {
+          actions.push(buttonLink(menuItems.views.edit, id, null, {minWidth: '88px'}));
+        }
+        actions.push(buttonLink(menuItems.del, this.confirmDelete));
+      }
+    }
+    else if (view != 'charts') {
+      //actions.push(buttonLink(menuItems.views.charts, ''));
+      actions.push(buttonLink(menuItems.export, this.exportMany));
+    }
+
+    if (entity && models[entity]) {
+      const delModal = this.state.deleteConfirmation ? (
+        <Modal className="modal-dialog"
+          isOpen={this.state.deleteConfirmation}
+          onRequestClose={this.closeModal}
+          style={{content:{position:'absolute',top:'calc(50% - 200px)',left:'calc(50% - 150px)',height:'200px',width:'300px'}}}>
+          <div>
+            <div className="modal-content">
+              <div className="modal-header">
+                <button  onClick={this.closeModal} className="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 className="modal-title">Delete item</h4>
+              </div>
+              <div className="modal-body">
+                Do you really want to delete the {models[entity].name}?
+              </div>
+              <div className="modal-footer">
+                <button key="bDelCancel" onClick={this.closeModal} className="btn btn-default" data-dismiss="modal">{i18n_actions.cancel}</button>
+                <button key="bDelOK" onClick={this.deleteOne} className="btn btn-info" data-dismiss="modal">{i18n_actions.ok}</button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+        ) : null;
+
+      return (
+        <div className="evo-toolbar">
+          <ul role="nav" className="evo-nav-pills pull-left">
+            {viewsList}
+          </ul>
+          <ul role="nav" className="evo-nav-pills pull-left">
+            {buttonLink(menuItems.new, '')}
+          </ul>
+          <ul role="nav" className="evo-nav-pills pull-left"
+            style={{minWidth:'220px'}}>
+                {actions}
+                <li/>
+          </ul>
+
+          <div className="clearfix"/>
+
+          {delModal}
+
+        </div>
+      )
+    }
+    return null
+  }
 
 })

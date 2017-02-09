@@ -18,7 +18,11 @@ import models from '../../../models/all_models'
 export default function() {
 	return {
 
+
+
     viewSuperType: 'n', // = many
+
+
 
 		getData: function(entity) {
 			const id = this.props.params.id, e = entity || this.props.params.entity,
@@ -55,6 +59,8 @@ export default function() {
 				});
 		},
 
+
+
 		getInitialState: function() {
 			this.setModel();
 			return {
@@ -63,9 +69,13 @@ export default function() {
 			};
 		},
 
+
+
 		componentDidMount: function() {
 			this.getData();
 		},
+
+
 
 		componentWillReceiveProps(nextProps){
 			if (nextProps.params && nextProps.params.entity != this.props.params.entity) {
@@ -77,6 +87,8 @@ export default function() {
 				this.getData(nextProps.params.entity);
 			}
 		},
+
+
 
 		pageSummary(data){
 			const pageIdx = this.props.location.query.page || 0,
@@ -115,9 +127,13 @@ export default function() {
 			return '';
 		},
 
+
+
 		setModel(entity) {
 			this.model = models[entity || this.props.params.entity]
 		},
+
+
 
 		clickSort: function(evt) {
 			const e = this.props.params.entity, fid = evt.currentTarget.id, query = this.props.location.query;
@@ -141,6 +157,8 @@ export default function() {
 			browserHistory.push(link + '?' + url.querySearch(query));
 			this.getData();
 		},
+
+
 
 		clickPagination(evt) {
 			const e = this.props.params.entity, id = evt.currentTarget.textContent, query = this.props.location.query;

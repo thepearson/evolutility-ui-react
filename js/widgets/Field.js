@@ -86,7 +86,7 @@ export default React.createClass({
 				const optVal = {
 					id: f.id + 'loading',
 					text: i18n_msg.loading
-				}
+				};
 				opts = [createOption(optVal)]
 				f.list = [optVal]
 			}

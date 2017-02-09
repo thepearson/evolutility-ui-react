@@ -32,7 +32,7 @@ export default React.createClass({
   	return (
         <div className="panel panel-default"> 
           {fields.map(function(f, idx){
-            const attr = (f.type==='lov') ? f.id+'_txt' : f.id
+            const attr = f.id;
             const fv = format.fieldValue(f, d[attr])
             const icon = m.icon ? <img className="evol-many-icon" src={'/pix/'+m.icon}/> : null
 

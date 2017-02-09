@@ -20,6 +20,9 @@ module.exports = {
     if (f.type === 'boolean') {
       return d ? <i className="glyphicon glyphicon-ok"></i> : '';
     }
+    else if (f.type === 'lov') {
+      return d;
+    }
     else if (f.type === 'date') {
       return this.dateString(d);
     }

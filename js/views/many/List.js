@@ -59,7 +59,8 @@ export default React.createClass({
         link = '/' + ((paramsCollec && paramsCollec.entity) || e) + '/browse/';
 
       function cell (d, f, idx) {
-        const value = d[(f.type === 'lov') ? f.id+'_txt' : f.id];
+        const value = d[f.id];
+
         if (idx === 0) {
           return <td key={idx}>
             <Link to={link+d.id}>
